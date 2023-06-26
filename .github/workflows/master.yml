@@ -17,8 +17,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: check check
-        run: echo "hello world, this is CICD -"
       # - name: Build & Install
       #   run: mvn -B install -D skipTests --no-transfer-progress
       # - name: Install Playwright
