@@ -2,8 +2,7 @@ name: Integration with Test repo
 on:
   pull_request:
     branches: [ master ]
-    type:
-      - closed
+    types: [ closed ]
 
 jobs:
   integration:
