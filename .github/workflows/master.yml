@@ -18,7 +18,7 @@ jobs:
         run: echo "Dev repo build and test done"
 
   Integration_Test:
-    if: (github.event.pull_request.merged == true) && contains(github.event.pull_request.labels.*.name, 'released')
+    needs: Build_and_Unit_Test
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -49,3 +49,16 @@ jobs:
         with:
           name: allure-results
           path: tests/allure-results/
+
+  Trigger_Regression:
+    needs: Integration_Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: trigger Regression test
+        uses: convictional/trigger-workflow-and-wait@v1.6.1
+        with:
+          owner: EVNPOC`
+          repo: epam-poc-playwright
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: release.workflow.yml
+          wait_workflow: false
