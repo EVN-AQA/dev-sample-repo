@@ -18,7 +18,7 @@ jobs:
         run: echo "Dev repo build and test done"
 
   Integration_Test:
-    if: (github.event.pull_request.merged == true) && contains(github.event.pull_request.labels.*.name, 'released')
+    needs: Build_and_Unit_Test
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
