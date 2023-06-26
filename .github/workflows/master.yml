@@ -2,11 +2,13 @@ name: Integration with Test repo
 on:
   pull_request:
     branches: [ master ]
-    types: [ closed ]
+    types:
+      - closed
+      - labeled
 
 jobs:
   integration:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && github.event.label.name == 'released'
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
