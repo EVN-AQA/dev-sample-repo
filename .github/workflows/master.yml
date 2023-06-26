@@ -8,7 +8,7 @@ on:
 
 jobs:
   integration:
-    if: github.event.pull_request.merged == true && github.event.label.name == 'released'
+    if: (github.event.pull_request.merged == true) && contains(github.event.pull_request.labels.*.name, 'released')
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
