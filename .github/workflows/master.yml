@@ -1,12 +1,12 @@
-name: Pull requests workflow
+name: Integration with Test repo
 on:
   pull_request:
     branches: [ master ]
-    Type:
+    type:
       - closed
 
 jobs:
-  if_merged:
+  integration:
     if: github.event.pull_request.merged == true
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -16,6 +16,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: check check
+        run: echo "hello world, this is CICD"
       # - name: Build & Install
       #   run: mvn -B install -D skipTests --no-transfer-progress
       # - name: Install Playwright
