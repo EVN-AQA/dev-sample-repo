@@ -57,7 +57,7 @@ jobs:
       - name: trigger Regression test
         uses: convictional/trigger-workflow-and-wait@v1.6.1
         with:
-          owner: EVNPOC`
+          owner: EVNPOC
           repo: epam-poc-playwright
           github_token: ${{ secrets.PAT_TOKEN }}
           workflow_file_name: release.workflow.yml
