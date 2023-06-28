@@ -15,7 +15,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
       - name: Dev repo build and test
-        run: echo "Dev repo build and test done"
+        run: echo "Dev repo build"
 
   Unit_Testing:
     needs: Deploy_and_Build
@@ -24,7 +24,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
       - name: Dev repo build and test
-        run: echo "Dev repo build and test done"
+        run: echo "Unit test done"
 
   Smoke_Testing:
     needs: Build_and_Unit_Test
