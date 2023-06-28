@@ -2,56 +2,56 @@ name: Integration with Test repo
 on:
   pull_request:
     branches: [ master ]
-    # types:
-    #   - closed
-    #   - labeled
+    types:
+      - closed
+      - labeled
 
 jobs:
-  # Build_and_Unit_Test:
-  #   if: (github.event.pull_request.merged == true) && contains(github.event.pull_request.labels.*.name, 'released')
-  #   timeout-minutes: 60
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout branch
-  #       uses: actions/checkout@v3
-  #     - name: Dev repo build and test
-  #       run: echo "Dev repo build and test done"
+  Build_and_Unit_Test:
+    if: (github.event.pull_request.merged == true) && contains(github.event.pull_request.labels.*.name, 'released')
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Dev repo build and test
+        run: echo "Dev repo build and test done"
 
-  # Integration_Test:
-  #   needs: Build_and_Unit_Test
-  #   timeout-minutes: 60
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout branch
-  #       uses: actions/checkout@v3
-  #     - name: Setup Java environment
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '17'
-  #     - name: Getting Test repo
-  #       uses: actions/checkout@master
-  #       with:
-  #         repository: EVNPOC/epam-poc-playwright
-  #         path: ./tests
-  #     - name: Build Test repo
-  #       run: mvn -B install -D skipTests --no-transfer-progress
-  #       working-directory: tests
-  #     - name: Install Playwright
-  #       run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
-  #       working-directory: tests
-  #     - name: Run tests
-  #       run: xvfb-run mvn test -Dsurefire.suiteXmlFiles="testNG/smoke.xml" -Dgroups=smoke
-  #       working-directory: tests
-  #     - name: Export Test result
-  #       uses: actions/upload-artifact@v3
-  #       if: always()
-  #       with:
-  #         name: allure-results
-  #         path: tests/allure-results/
+  Integration_Test:
+    needs: Build_and_Unit_Test
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Setup Java environment
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Getting Test repo
+        uses: actions/checkout@master
+        with:
+          repository: EVNPOC/epam-poc-playwright
+          path: ./tests
+      - name: Build Test repo
+        run: mvn -B install -D skipTests --no-transfer-progress
+        working-directory: tests
+      - name: Install Playwright
+        run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
+        working-directory: tests
+      - name: Run tests
+        run: xvfb-run mvn test -Dsurefire.suiteXmlFiles="testNG/smoke.xml" -Dgroups=smoke
+        working-directory: tests
+      - name: Export Test result
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: allure-results
+          path: tests/allure-results/
 
   Trigger_Regression:
-    # needs: Integration_Test
+    needs: Integration_Test
     runs-on: ubuntu-latest
     steps:
       - name: trigger Regression test
