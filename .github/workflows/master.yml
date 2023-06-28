@@ -1,4 +1,4 @@
-name: Integration with Test repo
+name: Product Released workflow
 on:
   pull_request:
     branches: [ master ]
@@ -7,7 +7,7 @@ on:
       - labeled
 
 jobs:
-  Build_and_Unit_Test:
+  Deploy_and_Build:
     if: (github.event.pull_request.merged == true) && contains(github.event.pull_request.labels.*.name, 'released')
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -17,9 +17,17 @@ jobs:
       - name: Dev repo build and test
         run: echo "Dev repo build and test done"
 
-  Integration_Test:
+  Unit_Testing:
+    needs: Deploy_and_Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+      - name: Dev repo build and test
+        run: echo "Dev repo build and test done"
+
+  Smoke_Testing:
     needs: Build_and_Unit_Test
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -50,7 +58,7 @@ jobs:
           name: allure-results
           path: tests/allure-results/
 
-  Trigger_Regression:
+  Triggering_Regression_Testing:
     needs: Integration_Test
     runs-on: ubuntu-latest
     steps:
