@@ -27,7 +27,7 @@ jobs:
         run: echo "Unit test done"
 
   Smoke_Testing:
-    needs: Build_and_Unit_Test
+    needs: Unit_Testing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -59,7 +59,7 @@ jobs:
           path: tests/allure-results/
 
   Triggering_Regression_Testing:
-    needs: Integration_Test
+    needs: Smoke_Testing
     runs-on: ubuntu-latest
     steps:
       - name: trigger Regression test
